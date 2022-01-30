@@ -1,0 +1,30 @@
+name: Run database migrations
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run migrations against'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      PRODUCTION_DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+    steps:
+      - name: Checkout project files
+        uses: actions/checkout@v2
+
+      - name: Run migrations on production
+        if: inputs.environment == 'production'
+        run: DATABASE_URL=PRODUCTION_DATABASE_URL ./bin/sqlx-cli migrate run
+
+      - name: Run migrations on staging
+        if: inputs.environment == 'staging'
+        run: DATABASE_URL=STAGING_DATABASE_URL ./bin/sqlx-cli migrate run
