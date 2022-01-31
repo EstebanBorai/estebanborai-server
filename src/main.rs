@@ -32,14 +32,14 @@ async fn rocket() -> _ {
 
     if cfg!(not(debug_assertions)) {
         let _guard = sentry::init((
-            "https://a5eec1eb178d4b368e4dfad2c4b3c044@o446883.ingest.sentry.io/5934543",
+            "https://263d24f2977b43f7b91b2c07dc941fec@o1131101.ingest.sentry.io/6175306",
             sentry::ClientOptions {
                 release: sentry::release_name!(),
                 ..Default::default()
             },
         ));
 
-        env::set_var("RUST_BACKTRACE", "1");
+        env::set_var("RUST_BACKTRACE", "full");
     }
 
     let config = Config::new();
