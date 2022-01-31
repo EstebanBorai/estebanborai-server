@@ -30,8 +30,8 @@ jobs:
 
       - name: Run migrations on production
         if: inputs.environment == 'production'
-        run: DATABASE_URL=PRODUCTION_DATABASE_URL diesel migration run
+        run: DATABASE_URL=$PRODUCTION_DATABASE_URL diesel migration run
 
       - name: Run migrations on staging
         if: inputs.environment == 'staging'
-        run: DATABASE_URL=STAGING_DATABASE_URL diesel migration run
+        run: DATABASE_URL=$STAGING_DATABASE_URL diesel migration run
