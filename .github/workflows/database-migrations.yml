@@ -12,7 +12,7 @@ on:
           - staging
 
 jobs:
-  build:
+  migrations:
     runs-on: macos-latest
     env:
       PRODUCTION_DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -21,10 +21,17 @@ jobs:
       - name: Checkout project files
         uses: actions/checkout@v2
 
+      - name: Setup Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
       - name: Run migrations on production
         if: inputs.environment == 'production'
-        run: DATABASE_URL=PRODUCTION_DATABASE_URL ./bin/sqlx-cli migrate run
+        run: DATABASE_URL=PRODUCTION_DATABASE_URL diesel migration run
 
       - name: Run migrations on staging
         if: inputs.environment == 'staging'
-        run: DATABASE_URL=STAGING_DATABASE_URL ./bin/sqlx-cli migrate run
+        run: DATABASE_URL=STAGING_DATABASE_URL diesel migration run
