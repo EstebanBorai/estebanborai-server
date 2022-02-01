@@ -16,9 +16,10 @@ impl Fairing for Cors {
 
     async fn on_response<'r>(&self, request: &'r Request<'_>, response: &mut Response<'r>) {
         let access_control_allow_origin = if cfg!(debug_assertions) {
-            "*"
+            String::from("*")
         } else {
-            "https://estebanborai.com"
+            std::env::var("CORS_ALLOW_ORIGIN")
+                .expect("Missing \"CORS_ALLOW_ORIGIN\" environment variable")
         };
 
         response.set_header(Header::new(
